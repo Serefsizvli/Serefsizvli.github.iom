@@ -1,0 +1,50 @@
+<html>
+  <body>
+    <h1>Barcode Reader</h1>
+    <button onclick="openBarcodeReader()">Open Barcode Reader</button>
+    <button onclick="showShoppingCart()">Sepete Ekle</button>
+    <div id="barcode-reader"></div>
+    <div id="shopping-cart"></div>
+
+    <script>
+      function openBarcodeReader() {
+        // Replace this with your actual barcode reader code
+        var barcode = "123";
+        var apiUrl = "https://api.example.com/product/price";
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", apiUrl + "?barcode=" + barcode, true);
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var price = xhr.responseText;
+            document.getElementById("barcode-reader").innerHTML = "Ürün fiyatı: " + price;
+            // Add product to shopping cart
+            var product = new Product(barcode, price);
+            shoppingCart.add(product);
+          } else {
+            document.getElementById("barcode-reader").innerHTML = "Error: " + xhr.statusText;
+          }
+        };
+        xhr.send();
+      }
+
+      function showShoppingCart() {
+        var cartContent = "";
+        var totalPrice = 0;
+        for (var i = 0; i < shoppingCart.length; i++) {
+          var product = shoppingCart[i];
+          cartContent += "Barkod: " + product.barcode + ", Fiyat: " + product.price + "<br>";
+          totalPrice += parseFloat(product.price);
+        }
+        cartContent += "Toplam Fiyat: " + totalPrice;
+        document.getElementById("shopping-cart").innerHTML = "Sepetiniz:<br>" + cartContent;
+      }
+
+      var shoppingCart = [];
+
+      function Product(barcode, price) {
+        this.barcode = barcode;
+        this.price = price;
+      }
+    </script>
+  </body>
+</html>
